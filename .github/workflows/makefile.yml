@@ -2,7 +2,7 @@ name: Build, Bundle, Release Go Plugin
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -23,7 +23,6 @@ jobs:
     - name: List files in the working directory
       run: |
         ls tyk/bundle/
-      
     # - name: Upload Bundle
     #   uses: actions/upload-artifact@v3
     #   with:
