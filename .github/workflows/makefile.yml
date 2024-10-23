@@ -2,14 +2,12 @@ name: Build, Bundle, Release Go Plugin
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: [ main ]
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: luminosita-ubuntu
 
     steps:
     - uses: actions/checkout@v4
@@ -22,20 +20,23 @@ jobs:
       
     - name: Bundle Go Plugin
       run: DOCKER_USER=root make go-bundle
+    - name: List files in the working directory
+      run: |
+        ls tyk/bundle/
       
-    - name: Upload Bundle
-      uses: actions/upload-artifact@v3
-      with:
-        name: customgoplugin.zip
-        path: tyk/bundle/bundle.zip
+    # - name: Upload Bundle
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: customgoplugin.zip
+    #     path: tyk/bundle/bundle.zip
 
-    - uses: jakejarvis/s3-sync-action@master
-      with:
-        args: --acl public-read --follow-symlinks
-      env:
-        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: 'us-east-1'   
-        SOURCE_DIR: 'tyk/bundle'
+    # - uses: jakejarvis/s3-sync-action@master
+    #   with:
+    #     args: --acl public-read --follow-symlinks
+    #   env:
+    #     AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     AWS_REGION: 'us-east-1'   
+    #     SOURCE_DIR: 'tyk/bundle'
     
